@@ -1,0 +1,70 @@
+\section{Implementazione}
+
+% 2.3.1
+\subsection{Metodologia di lavoro}
+Alchemist è sviluppato facendo uso delle pratiche tipiche della metodologia DevOps\n{\url{https://aws.amazon.com/it/devops/what-is-devops/}}, particolarmente adatta nel caso di un software di medio-grandi dimensioni con rilasci frequenti.
+
+\subsubsection{Divisione in moduli}
+L'implementazione degli agenti cognitivi e del loro ecosistema all'interno di Alchemist, è stata strutturata in maniera trasversale rispetto all'incarnazione che si sarebbe poi utilizzata per effettuare le simulazioni. Questa proprietà, rende le classi introdotte flessibili a poter essere utilizzate oltre che in quelle già esistenti, anche in possibili future incarnazioni maggiormente incentrate sul comportamento delle folle. \newline
+Al fine di aderire alla struttura attuale di Alchemist incentrata sulla modularità, sono stati creati i moduli \texttt{alchemist-influence-sphere}, per la realizzazione delle sfere di influenza e \texttt{alchemist-cognitive-agents}, per l'implementazione dei pedoni e delle azioni, reazioni e caratteristiche ad essi relative. \newline
+Tale struttura ha portato notevoli benefici in fase di sviluppo, garantendo la possibilità di mantenere separato e circoscritto il proprio spazio di lavoro rispetto al resto del simulatore e quindi facilitando anche le fasi di refactoring e testing del codice.
+
+\subsubsection{Divisione in package}
+Internamente ad ogni modulo, tutte le entità derivanti dal modello alla base di Alchemist sono state organizzate mantenendo la struttura dei package originale, che prevede una netta separazione tra interfacce e relative implementazioni. Per differenziare le nuove tipologie di nodo, azione, reazione o condizione, è stato definito un package per ognuno di questi elementi. \newline
+Utilizzare questi accorgimenti, permette durante la scrittura delle simulazioni in linguaggio YAML, di specificare il tipo di un oggetto direttamente utilizzando il nome della classe, mentre altrimenti sarebbe stato necessario anche l'intero package di appartenenza. \newline
+Per quanto riguarda le caratteristiche dei pedoni, costruite in maniera indipendente rispetto all'architettura del simulatore, è stata invece adottata una suddivisione tematica, differenziando le caratteristiche individuali da quelle cognitive al fine di mantenere separate queste due categorie, in previsione dell'arricchimento con nuove proprietà appartenenti all'una o all'altra.
+
+\subsubsection{Strumenti di sviluppo}
+
+\paragraph{Git}
+Git\n{\url{https://git-scm.com}} è un sistema per il controllo di versione distribuito (DVCS), che permette di gestire e supervisionare lo sviluppo del software che si sta costruendo, mantenendo ed organizzando uno storico delle modifiche effettuate. Una delle sue funzionalità, è quella di consentire di mantenere più versioni dello stesso sistema, tipicamente una stabile ed una in fase sperimentale, grazie alle quali si è in grado di fronteggiare facilmente i vari casi di malfunzionamento che si potrebbero incontrare durante l'implementazione. \newline
+Alchemist utilizza la metodologia Gitflow\n{\url{https://nvie.com/posts/a-successful-git-branching-model/}} per la gestione dei vari rami di sviluppo e obbliga ogni contributore a creare una propria \textit{fork} del progetto principale, a lavorare su di essa e a contribuire con il meccanismo delle \textit{pull requests}, per integrare all'interno della versione originale del simulatore le modifiche apportate.
+
+\paragraph{Gradle}
+Gradle\n{\url{https://gradle.org}} è uno strumento per l'automazione della costruzione del software, organizzato in task per semplificare la compilazione del codice sorgente, la risoluzione delle dipendenze, l'esecuzione dei test automatici e il controllo di qualità del codice. I comandi che si intendono lanciare possono essere liberamente personalizzati dallo sviluppatore, che può creare degli script utilizzando alternativamente il DSL\n{linguaggio specifico di dominio} Groovy o una sua variante basata su Kotlin. \newline
+Il simulatore Alchemist, mantiene, oltre a quello generale di progetto, uno script Gradle per ogni modulo presente al suo interno, nel quale sono specificati tutti e soli gli altri moduli o eventuali librerie esterne di cui si vogliono utilizzare le funzionalità.
+
+\paragraph{Travis CI}
+Travis\n{\url{https://travis-ci.org}} è un servizio di integrazione continua che, garantendo piena compatibilità con la piattaforma di hosting per progetti GitHub, offre la possibilità di monitorare il comportamento del sistema software allo stato attuale, installandolo ed eseguendolo su diverse macchine virtuali, con diversi sistemi operativi e diverse configurazioni. \newline
+Questa possibilità, permette di tenere sempre sotto controllo la retrocompatibilità ed il supporto multi-piattaforma del simulatore, testandone il funzionamento con diverse versioni della JVM su tutti i principali sistemi operativi.
+
+\paragraph{Orchid}
+La scrittura e la manutenzione della documentazione relativa alle classi e alle interfacce presenti nel simulatore è una fase essenziale del processo di sviluppo, in quanto è solo facendo riferimento ad essa che è plausibile orientarsi all'interno di un progetto vasto come Alchemist. \newline
+Orchid\n{\url{https://orchid.netlify.com}} mette a disposizione un motore per la generazione di pagine web statiche completamente integrato nel progetto, cioè utilizzabile anche mediante Gradle, con il quale è possibile ottenere un sito comprensivo di documentazione estrapolata dal codice sorgente, automaticamente aggiornato ad ogni cambiamento di API.
+
+% 2.3.2
+\subsection{Il linguaggio Kotlin}
+Kotlin\n{\url{https://kotlinlang.org}} è un linguaggio di programmazione nato nel 2011 come progetto open source dell'azienda JetBrains, specializzata nello sviluppo software. \newline
+La sua principale caratteristica è quella di essere pienamente interoperabile con il linguaggio Java e la Java Virtual Machine (JVM) e cioè di poter sfruttare tutta l'immensa disponibilità di librerie presenti per essi e al contempo di poter essere importato all'interno di codice Java senza riscontrare particolari problemi. \newline
+Kotlin è un linguaggio multi-paradigma, in quanto presenta sia caratteristiche tipiche della programmazione orientata agli oggetti sia del paradigma funzionale, e multi-piattaforma, poiché, oltre che per la JVM, può essere compilato per Android, iOS, JavaScript e nativamente per Windows, Linux e MacOS; anche se quest'ultima funzionalità è ancora in fase sperimentale. \newline
+Pur riuscendo un programmatore Java ad iniziare a sviluppare in Kotlin abbastanza agilmente, per uno studio più approfondito del linguaggio e dei suoi vari aspetti più avanzati si consiglia la lettura del libro \enquote{Kotlin in Action} \cite{Jemerov2017}.
+
+\subsubsection{Benefici riscontrati}
+La scelta dell'uso di Kotlin piuttosto che Java per l'implementazione degli agenti cognitivi all'interno di Alchemist, si è rilevata molto vantaggiosa in diversi frangenti, nei quali altrimenti, per ottenere lo stesso risultato, si sarebbe dovuto adottare soluzioni molto più verbose e di difficile comprensione.
+
+\paragraph{Conciso} Per facilitare la fase di scrittura della simulazione all'interno del file YAML, si è voluto lasciare massima libertà all'utente sulla tipologia e sulla quantità di parametri da inserire per costruire un pedone. Tra i compromessi adottati, é permesso specificare con una stringa significativa invece che instanziare una variabile di tipo \texttt{Age} o \texttt{Gender}, per codificare l'età e il sesso del pedone da caricare.  \newline
+Al fine di ottenere questo risultato utilizzando Java, sarebbe stato obbligatorio utilizzare molteplici costruttori ognuno con un differente tipo di variabile o con un numero diverso di parametri; grazie all'uso dell'annotazione \texttt{@JvmOverloads}, invece, l'incombenza di generare questo codice boilerplate viene affidata al compilatore.
+
+\paragraph{Gestione dei null} Per cercare di prevenire la nascita di \texttt{NullPointerException}, Kotlin cerca di forzare il programmatore a non utilizzare delle variabili il cui tipo permetta che esse assumano il valore \texttt{null}. \newline 
+Per aderire a questa scelta, il gruppo di appartenenza è stato pensato come una proprietà non annullabile e non modificabile del pedone, che in quanto tale, deve sempre esistere, anche nel caso in cui esso sia l'unico elemento a costituirlo. \newline
+Durante la scrittura di una simulazione, tuttavia, per assegnare un gruppo ad un pedone è necessario istanziarlo all'interno della sezione \texttt{variables} e poi utilizzare il riferimento a tale variabile come parametro.
+Nel caso in cui il pedone non sia parte di un gruppo ma indipendente, questa procedura richiede molta verbosità, infatti sarebbe necessario creare un gruppo di tipo \texttt{Alone} per ogni pedone solitario presente e non si potrebbe trarre vantaggio dal caricamento multiplo di nodi supportato dal simulatore. \newline
+Per risolvere questo problema, si è permesso all'utente di specificare opzionalmente il gruppo di appartenenza del pedone nel file YAML ma tramite l'operatore delegato \texttt{lazy}, questo viene inizializzato in un secondo momento al gruppo inserito o, se non specificato, ad una nuova istanza di \texttt{Alone}.
+
+\paragraph{Funzioni di estensione} Capita spesso di voler utilizzare una funzionalità per cui una classe sarebbe predisposta ma che non è stata inclusa tra i metodi pubblici ad essa appartenenti. Le funzioni di estensione propongono un'elegante soluzione a questo problema senza modificare le API della classe in questione o fare uso di metodi statici, meno espressivi dell'intento della funzione. \newline 
+Dovendo implementare delle azioni inerenti il movimento di pedoni, si è avuta questa necessità per effettuare delle trasformazioni sulle posizioni, come la moltiplicazione di ogni coordinata per una stessa costante o la rotazione considerando un determinato angolo. Tali funzionalità, seppur molto comode da avere a disposizione nell'interfaccia \texttt{Position}, avrebbero potuto fuorviare l'utente sul reale intento dell'astrazione in questione, il cui ruolo è quello di modellare il concetto di posizione all'interno dell'ambiente, non di operare su di esso. \newline
+Ancora più significativo, è il caso dell'interfaccia \texttt{RandomGenerator}, che, appartenendo alla libreria Apache Commons, non poteva essere modificata e quindi ampliata con ulteriori metodi quali ad esempio la generazione di numeri in virgola mobile compresi tra due estremi arbitrari.
+
+% 2.3.3
+\subsection{Librerie esterne}
+
+\paragraph{Konf}
+Essendo presenti molti parametri personalizzabili, soprattutto relativamente ai pesi riportati in tabella \ref{table:weights-impact}, si è ritenuto necessario impostare tali valori in un file esterno di configurazione salvato in formato TOML\n{\url{https://github.com/toml-lang/toml}}, standard di serializzazione considerato tra i più leggibili per un essere umano. \newline
+Per riuscire ad importare all'interno delle classi di interesse i parametri contenuti in questo file, si è fatto uso della libreria Konf\n{\url{https://github.com/uchuhimo/konf}}, la quale offre il supporto e l'intercompatibilità tra tutti i principali formati di configurazione.
+Per un corretto utilizzo è necessario riportare i nomi dei parametri che si vogliono leggere in una classe di specificazione creata estendendo \texttt{ConfigSpec} e fornire il percorso relativo alla risorsa in questione.
+
+% 2.3.4
+\subsection{Testing}
+Parallelamente alla fase di sviluppo è stata portata avanti un'attività di \textit{unit testing} per ogni nuova funzionalità introdotta, con lo scopo di verificarne il corretto funzionamento immediato ma soprattutto quello futuro, impedendo che nuove modifiche introdotte nel simulatore possano compromettere il suo stato di avanzamento attuale. \newline
+Per facilitare la creazione dei test, è stata scelta la libreria KotlinTest\n{\url{https://github.com/kotlintest/kotlintest}}, grazie alla quale è stato possibile esprimere in linguaggio naturale non solo la descrizione inerente gli aspetti da collaudare ma anche i metodi predisposti al confronto per la valutazione della correttezza del test eseguito. \newline
+Quasi sempre, al fine di creare dei test significativi, è stato necessario ideare una simulazione specifica per essa, caricarla da un file YAML, eseguirla considerando un numero idoneo di passi temporali ed infine determinarne il buon esito o il fallimento, confrontando la situazione iniziale e quella finale, valutando eventualmente anche gli stadi intermedi.

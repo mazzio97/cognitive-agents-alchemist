@@ -1,0 +1,82 @@
+\documentclass[12pt,a4paper,openright,twoside]{report}
+
+\input{pacchetti.tex}
+\input{comandi.tex}
+
+\addbibresource{bibliografia/bibliografia.bib}
+
+% Impaginazione
+\textwidth=450pt
+\oddsidemargin=0pt
+\linespread{1.3}
+\pagestyle{fancy}
+\addtolength{\headheight}{15pt}
+\fancyhead[RO,LE]{\thepage}
+\fancyhead[RE]{\small{\it{PROGETTAZIONE E IMPLEMENTAZIONE DI AGENTI COGNITIVI\\PER SIMULAZIONI DI EVACUAZIONI DI FOLLE IN ALCHEMIST}}}
+\fancyfoot{}
+
+\begin{document}
+\title{Progettazione e Implementazione di Agenti Cognitivi per Simulazioni di Evacuazioni di Folle in Alchemist}
+\author{Diego Mazzieri}
+\date{\today}
+
+% Frontespizio
+\begin{titlepage}
+\input{frontespizio.tex}
+\end{titlepage}
+\page{empty}
+
+% Prefazione
+\pagenumbering{roman}
+\oddsidemargin=0pt
+\evensidemargin=0pt
+
+% Dedica
+\begin{titlepage}
+\doc{dedica}
+\page{empty}
+\end{titlepage}
+
+\chapter*{Introduzione}
+\addcontentsline{toc}{chapter}{Introduzione}
+\input{capitoli/introduzione.tex}
+\page{empty}
+
+% Indice
+\tableofcontents
+\page{empty}
+
+% Capitoli
+\pagenumbering{arabic}
+
+\chapter{Background}
+\input{capitoli/background.tex}
+\page{empty}
+
+\chapter{Agenti cognitivi in Alchemist}
+\input{capitoli/agenti-cognitivi.tex}
+\page{empty}
+
+\chapter{Casi di studio}
+\input{capitoli/casi-di-studio.tex}
+\page{empty}
+
+\chapter{Conclusioni e sviluppi futuri}
+\input{capitoli/conclusioni-e-sviluppi.tex}
+\page{empty}
+
+\printbibliography
+\page{empty}
+
+% Ringraziamenti
+\chapter*{Ringraziamenti}
+\addcontentsline{toc}{chapter}{Ringraziamenti}
+\input{capitoli/ringraziamenti.tex}
+\page{empty}
+
+% Appendice
+\appendix
+\chapter{File di simulazione}
+\input{capitoli/appendice.tex}
+
+\end{document}

@@ -1,0 +1,39 @@
+\usepackage[italian]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{fancyhdr}
+\usepackage{indentfirst}
+\usepackage[T1]{fontenc}
+\usepackage[final]{microtype}
+\usepackage{newlfont}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{wrapfig}
+\usepackage{minted}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{latexsym}
+\usepackage{amsthm}
+\usepackage{csquotes}
+\usepackage[sorting=none]{biblatex}
+\usepackage[hidelinks]{hyperref}
+\usepackage{silence}
+\usepackage{xargs}
+
+% \addbibresource{bibliografia/bibliografia.bib}
+
+\hyphenation{} % vanno inserite le parole che latex non riesce a tagliare nel modo giusto andando a capo
+
+\hypersetup{
+    pdftitle={Progettazione e Implementazione di Agenti Cognitivi per Simulazioni di Evacuazioni di Folle in Alchemist}
+}
+
+% Impaginazione
+\textwidth=450pt
+\oddsidemargin=0pt
+\linespread{1.3}
+\pagestyle{fancy}
+\addtolength{\headheight}{15pt}
+\fancyhead[RO,LE]{\thepage}
+\fancyhead[RE]{\small{\it{PROGETTAZIONE E IMPLEMENTAZIONE DI AGENTI COGNITIVI\\PER SIMULAZIONI DI EVACUAZIONI DI FOLLE IN ALCHEMIST}}}
+\fancyfoot{}

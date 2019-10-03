@@ -1,0 +1,26 @@
+\section{Sviluppi futuri}
+Per migliorare il supporto di Alchemist al problema della simulazione del comportamento delle folle, vengono fornite delle direzioni di ricerca verso le quali il lavoro qui presentato può essere esteso.
+
+\paragraph{Forma dei pedoni}
+Attualmente i pedoni vengono tutti rappresentati mediante dei cerchi di dimensione predefinita. Alla stregua di altre caratteristiche come la velocità, il sesso o l'età, anche la forma dovrebbe essere eterogenea, in modo da ricalcare più fedelmente l'occupazione reale dell'agente nello spazio. \newline
+Per questo motivo, è necessario definire sia diverse dimensioni in relazione all'età e al sesso del pedone sia delineare la corporatura con delle forme geometriche più simili a quelle che questa presenta in natura. Due possibili alternative per quest'ultimo aspetto, menzionate da Chen nell'analisi delle varie versioni esistenti del modello forze sociali \cite{Chen2017}, sono l'ellisse e la rappresentazione \enquote{tre cerchi}, due dei quali costituiscono le spalle mentre quello al centro la testa.
+
+\paragraph{Ruolo dei pedoni}
+Le simulazioni che sono state discusse, vedono come protagonisti pedoni che hanno tutti una conoscenza limitata al loro intorno e a quello che vedono dell'ambiente circostante. \newline 
+In realtà, potrebbero esistere anche degli agenti che hanno più familiarità di altri con l'ambiente in cui sono inseriti e
+quindi, per muoversi all'interno di esso potrebbero far uso di strategie di esplorazione globale come l'\textit{algoritmo di Dijkstra} o $A^{*}$. \newline 
+Un esempio di questa differenziazione è fornito in \cite{Tan2019} dalle tipologie \textit{visitor} e \textit{tenant} e può essere usato come punto di partenza per analizzare questo tema.
+
+\paragraph{Collisioni realistiche}
+L'introduzione di ambienti caratterizzati da una componente fisica, per ora, impedisce ad un nodo di andare ad occupare una posizione in cui ne è già presente un altro ma non gestisce le forze in gioco in una potenziale collisione tra essi, che viene solamente prevenuta impedendo lo spostamento. \newline
+Una zona ad alta densità, è contraddistinta da una quantità enorme di questi urti scaturiti dal movimento frenetico dei pedoni quindi, riuscire a riprodurli, porterebbe degli importanti miglioramenti per il realismo della simulazione.
+
+\paragraph{Relazioni tra gruppi}
+Un gruppo, analogamente ad un pedone, può essere considerato come un’agente della simulazione e, in quanto tale, potrebbe essere influenzato o influire sulle scelte degli altri gruppi presenti nell'ambiente. \newline
+Queste possibilità vengono analizzate da Qiu e Xu in \cite{Qiu2010}, dove ad ogni gruppo viene associata una matrice intra-relazionale per definire i rapporti tra ogni possibile coppia di pedoni al suo interno e vi è un’unica matrice inter-relazionale per evidenziare l’influenza reciproca dei diversi gruppi presenti. \newline
+Grazie a questa modellazione, non solo è possibile differenziare le attitudini delle varie tipologie di gruppo, ma è anche pensabile delineare la struttura che i vari membri o i vari gruppi devono assumere durante il movimento.
+
+\paragraph{Differenze culturali}
+Le caratteristiche di un pedone non sono solo biologiche, mentali o strutturali ma possono avere influssi derivanti anche dalla sua cultura. \newline
+La storia, le abitudini e l'ideologia di un paese sono indubbiamente fattori che incidono sul modo di agire di un agente che vive al suo interno e perciò vanno studiati per i diversi popoli esistenti e inclusi nei modelli di evacuazione. \newline
+Per avere un'idea più chiara di come inserire questi aspetti in un modello ad agenti, si può partire dal contributo basato su osservazioni empiriche descritto in \cite{Fridman2013}.

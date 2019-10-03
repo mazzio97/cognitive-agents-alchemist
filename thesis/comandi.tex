@@ -1,0 +1,84 @@
+% SHORTCUTS
+
+% corsivo
+\renewcommandx{\i}[1]{\emph{#1}}
+
+% grassetto
+\renewcommandx{\b}[1]{\textbf{#1}}
+
+% nota a pie' di pagina
+\newcommandx{\n}[2][1 = ]{\ifstrequal{#1}{}{%
+        \footnote{#2.}%
+    }{
+        \footnote{\label{note:#1}#2.}%
+    }%
+}
+
+% citazione
+\renewcommandx{\c}[2][1 = ]{\ifstrequal{#1}{}{
+        \cite{#2}%
+    }{
+        \cite[#1]{#2}%
+    }%
+}
+
+% fra parentesi
+\newcommandx{\p}[2][1 = ]{--- #2\ifstrequal{#1}{e}{}{ ---}}
+
+% capitolo
+\renewcommandx{\cap}[3][1 = ]{\ifstrequal{#1}{*}{%
+        \chapter*{#2}\label{cap:#3}%
+        \addcontent{#2}%
+    }{%
+        \chapter{#2}\label{cap:#3}%
+    }
+}
+
+% sezione
+\renewcommandx{\sec}[2]{\section{#1}\label{sec:#2}}
+
+% sottosezione
+\newcommandx{\sub}[2]{\subsection{#1}\label{sub:#2}}
+
+% sottosottosezione
+\newcommandx{\subsub}[2]{\subsubsection{#1}\label{subsub:#2}}
+
+% IMPORT E CAPTIONS
+
+% documento
+\newcommandx{\doc}[1]{\input{capitoli/#1.tex}}
+
+% immagine
+\newcommandx{\img}[2][1 = 1.0]{
+    \includegraphics[width=#1\linewidth]{immagini/#2}
+}
+
+% figura
+\newcommandx{\fig}[7][1 = 1.0, 2 = !htb, 3 = \centering, 7 = , usedefault]{
+    \begin{figure}[#2]
+        #3
+        \img[#1]{#4}%
+        \caption{#6.}%
+        \ifstrequal{#7}{}{}{(fonte: \url{#7})}%
+        \label{fig:#5}%
+    \end{figure}
+}
+
+% figura allineata
+\newcommandx{\wfig}[8][1 = 0.5, 2 = 0.9, 3 = r, 4 = \centering, 8 = , usedefault]{
+    \begin{wrapfigure}{#3}{#1\linewidth}
+        #4
+        \img[#2]{#5}
+        \caption{#7.}
+        \ifstrequal{#8}{}{}{(fonte: \url{#8})}
+        \label{fig:#6}
+    \end{wrapfigure}
+}
+
+% ALTRO
+
+% aggiunta all'indice
+\newcommandx{\addcontent}[1]{\addcontentsline{toc}{chapter}{#1}}
+
+% nuova pagina
+\newcommandx{\page}[1]{\clearpage{\pagestyle{#1}\cleardoublepage}}

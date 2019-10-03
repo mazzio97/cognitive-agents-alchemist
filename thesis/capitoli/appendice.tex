@@ -1,0 +1,290 @@
+\section{Influenza del gruppo}
+
+\begin{minted}[gobble=0,frame=single,linenos]{yaml}
+incarnation: protelis
+
+environment:
+  type: Continuous2DEnvironment
+
+seeds:
+  scenario: 0
+  simulation: 1
+
+variables:
+  group1: &group1
+    formula: it.unibo.alchemist.model.implementations.groups.Friends<Any>()
+    language: kotlin
+  group2: &group2
+    formula: it.unibo.alchemist.model.implementations.groups.Friends<Any>()
+    language: kotlin
+  group3: &group3
+    formula: it.unibo.alchemist.model.implementations.groups.Friends<Any>()
+    language: kotlin
+  group4: &group4
+    formula: it.unibo.alchemist.model.implementations.groups.Friends<Any>()
+    language: kotlin
+  danger: &danger
+    formula: "\"danger\""
+
+layers:
+  - type: BidimensionalGaussianLayer
+    molecule: *danger
+    parameters: [0.0, 0.0, 1.0, 2.0]
+
+reactions: &behavior
+  - time-distribution:
+      type: DiracComb
+      parameters: [2.0]
+    type: BlendedSteering
+    actions:
+      - type: Cohesion
+      - type: AvoidFlowField
+        parameters: [*danger]
+
+displacements:
+  - in:
+      type: Circle
+      parameters: [8, 0, 0, 15]
+    nodes:
+      type: HomogeneousPedestrian2D
+      parameters: [*group1]
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [4, 0, 0, 15]
+    nodes:
+      type: HomogeneousPedestrian2D
+      parameters: [*group2]
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [10, 0, 0, 15]
+    nodes:
+      type: HomogeneousPedestrian2D
+      parameters: [*group3]
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [2, 0, 0, 15]
+    nodes:
+      type: HomogeneousPedestrian2D
+      parameters: [*group4]
+    programs:
+      - *behavior
+\end{minted}
+
+\section{Contagio sociale}
+
+\begin{minted}[gobble=0,frame=single,linenos]{yaml}
+incarnation: protelis
+
+variables:
+  danger: &danger
+    formula: "\"danger\""
+  target: &target
+    formula: "\"target\""
+
+environment:
+  type: Continuous2DEnvironment
+
+layers:
+  - type: BidimensionalGaussianLayer
+    molecule: *danger
+    parameters: [80, 0, 100, 15]
+  - type: BidimensionalGaussianLayer
+    molecule: *target
+    parameters: [-50, 0, 10, 5]
+
+seeds:
+  scenario: 0
+  simulation: 1
+
+steering: &steering
+  - time-distribution:
+      type: DiracComb
+      parameters: [2.0]
+    type: PrioritySteering
+    actions:
+      - type: AvoidFlowField
+        parameters: [*danger]
+      - type: FollowFlowField
+        parameters: [*target]
+    conditions:
+      - type: WantToEvacuate
+        parameters: [*danger]
+
+cognitive: &cognitive
+  - time-distribution:
+      type: DiracComb
+      parameters: [0.5]
+    type: CognitiveBehavior
+    actions:
+      - type: RandomRotate
+
+displacements:
+  - in:
+      type: Circle
+      parameters: [25, 0, 0, 8]
+    nodes:
+      type: CognitivePedestrian2D
+      parameters: ["adult", "female", *danger]
+    programs:
+      - *steering
+      - *cognitive
+  - in:
+      type: Circle
+      parameters: [75, 60, 0, 10]
+    nodes:
+      type: CognitivePedestrian2D
+      parameters: ["adult", "male", *danger]
+    programs:
+      - *steering
+      - *cognitive
+\end{minted}
+
+\section{Scelta dell'uscita}
+
+\begin{minted}[gobble=0,frame=single,linenos]{yaml}
+incarnation: protelis
+
+variables:
+  danger: &danger
+    formula: "\"danger\""
+  exit1: &exit1
+    formula: "\"exit1\""
+  exit2: &exit2
+    formula: "\"exit2\""
+  exit3: &exit3
+    formula: "\"exit3\""
+  exit4: &exit4
+    formula: "\"exit4\""
+
+environment:
+  type: ImageEnvironment
+  parameters: [images/multiple-exits.png, 0.0416]
+
+seeds:
+  scenario: 1
+  simulation: 0
+
+layers:
+  - type: BidimensionalGaussianLayer
+    molecule: *danger
+    parameters: [10, 10, 100, 3]
+  - type: BidimensionalGaussianLayer
+    molecule: *exit1
+    parameters: [0, 0, 10, 50, 0.5, 0.5]
+  - type: BidimensionalGaussianLayer
+    molecule: *exit2
+    parameters: [0, 10, 20, 50, 0.5, 0.5]
+  - type: BidimensionalGaussianLayer
+    molecule: *exit3
+    parameters: [0, 20, 10, 50, 0.5, 0.5]
+  - type: BidimensionalGaussianLayer
+    molecule: *exit4
+    parameters: [0, 10, 0, 50, 0.5, 0.5]
+
+reactions: &behavior
+  - time-distribution:
+      type: DiracComb
+      parameters: [1.0]
+    type: BlendedSteering
+    conditions:
+      - type: WantToEvacuate
+        parameters: [*danger]
+    actions:
+      - type: AvoidFlowField
+        parameters: [*danger]
+      - type: FollowFlowField
+        parameters: [*exit1]
+      - type: FollowFlowField
+        parameters: [*exit2]
+      - type: FollowFlowField
+        parameters: [*exit3]
+      - type: FollowFlowField
+        parameters: [*exit4]
+  - time-distribution:
+      type: DiracComb
+      parameters: [0.25]
+    type: CognitiveBehavior
+    actions:
+      - type: RandomRotate
+
+displacements:
+  - in:
+      type: Circle
+      parameters: [75, 10, 10, 8]
+    nodes:
+      type: CognitivePedestrian2D
+      parameters: ["adult", "male", *danger]
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [75, 10, 10, 8]
+    nodes:
+      type: CognitivePedestrian2D
+      parameters: ["adult", "female", *danger]
+    programs:
+      - *behavior
+\end{minted}
+
+\section{Presenza di ostacoli}
+
+\begin{minted}[gobble=0,frame=single,linenos]{yaml}
+incarnation: protelis
+
+variables:
+  target: &target
+    formula: "\"target\""
+
+environment:
+  type: ImageEnvironment
+  parameters: [images/obstacles.png, 0.125]
+
+seeds:
+  scenario: 0
+  simulation: 1
+
+layers:
+  - type: BidimensionalGaussianLayer
+    molecule: *target
+    parameters: [75.0, 30.0, 20.0, 10.0]
+
+reactions: &behavior
+  - time-distribution:
+      type: DiracComb
+      parameters: [2.0]
+    type: BlendedSteering
+    actions:
+      - type: FollowFlowField
+        parameters: [*target]
+      - type: ObstacleAvoidance
+        parameters: [6]
+
+displacements:
+  - in:
+      type: Circle
+      parameters: [20, -12, 30, 5]
+    nodes:
+      type: HomogeneousPedestrian2D
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [30, 12, 68, 7]
+    nodes:
+      type: HomogeneousPedestrian2D
+    programs:
+      - *behavior
+  - in:
+      type: Circle
+      parameters: [40, 12, -12, 10]
+    nodes:
+      type: HomogeneousPedestrian2D
+    programs:
+      - *behavior
+\end{minted}
