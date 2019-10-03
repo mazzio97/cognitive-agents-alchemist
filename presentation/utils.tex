@@ -1,0 +1,26 @@
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{wrapfig}
+\usepackage{xargs}
+\usepackage{multicol}
+\usepackage{minted}
+\usepackage{csquotes}
+\usepackage[backend=biber,style=reading,sorting=none]{biblatex}
+
+\bibliography{bibliography}
+
+\renewcommandx{\i}[1]{\emph{#1}}
+
+\renewcommandx{\b}[1]{\textbf{#1}}
+
+\newcommandx{\e}[1]{\b{#1}}
+
+\newcommandx{\sld}[2]{
+    \begin{frame}
+        \frametitle{#2}
+        \input{slides/#1.tex}
+    \end{frame}
+}

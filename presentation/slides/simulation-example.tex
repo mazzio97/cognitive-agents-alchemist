@@ -1,0 +1,64 @@
+\setbeamerfont{block title}{size=\footnotesize}
+
+\begin{block}{Descrizione}
+    \scriptsize
+    400 uomini adulti in un ambiente rettangolare cercano di evacuare perché si trovano in prossimità della zona di pericolo o perché sono influenzati dalle reazioni degli altri.
+\end{block}
+
+\begin{multicols}{2}
+    \begin{minted}[
+        fontsize = \tiny,
+        fontfamily = tt,
+        tabsize = 2,
+        frame = single,
+        framesep = 1mm,
+        baselinestretch = 1,
+        xleftmargin = 2mm,
+        numbersep = 1mm,
+        linenos
+    ]{yaml}
+    incarnation: protelis
+    
+    variables:
+      danger: &danger
+        formula: "\"danger\""
+    
+    environment:
+      type: Rectangular2DEnvironment
+      parameters: [30, 20]
+    
+    layers:
+      - type: BidimensionalGaussianLayer
+        molecule: *danger
+        parameters: [0, 14, 5, 500, 3, 5]
+    
+    cognitive: &cognitive
+      - time-distribution:
+          type: DiracComb
+          parameters: [0.5]
+        type: CognitiveBehavior
+    
+    steering: &steering
+      - time-distribution:
+          type: DiracComb
+          parameters: [3.0]
+        type: PrioritySteering
+        actions:
+          - type: AvoidFlowField
+            parameters: [*danger]
+        conditions:
+          - type: WantToEvacuate
+            parameters: [*danger]
+    
+    displacements:
+      - in:
+          type: Rectangle
+          parameters: [400, -12, -9, 24, 18]
+        nodes:
+          type: CognitivePedestrian2D
+          parameters: ["adult", "male", *danger]
+        programs:
+          - *steering
+          - *cognitive
+    \end{minted}
+\end{multicols}
